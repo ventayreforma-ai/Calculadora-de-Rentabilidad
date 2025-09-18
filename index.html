@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calculadora Rentabilidad Flip Inmobiliario</title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div>
+        <h1>Calculadora de Rentabilidad (Compra · Reforma · Venta)</h1>
+        <div class="sub">España · ROI objetivo por defecto <strong>25%</strong> · valores editables · decimales con <em>coma</em> o <em>punto</em>.</div>
+      </div>
+      <div class="badge">💡 Consejos rápidos: escribe “10” en % si quieres 10%</div>
+    </div>
+
+    <div class="grid">
+      <section class="card inputs">
+        <h2 class="section-title">Datos de Entrada</h2>
+
+        <!-- COMPRA -->
+        <div class="row">
+          <label for="pc">Precio de compra (PC)</label>
+          <div class="ctl"><span class="suffix">€</span><input id="pc" type="text" inputmode="decimal" placeholder="90.000" value="90000"></div>
+          <div class="hint">Precio pactado por la propiedad</div>
+        </div>
+        <div class="row">
+          <label for="itp">ITP / IVA compra</label>
+          <div class="ctl"><input id="itp" type="text" inputmode="decimal" placeholder="10" value="10"><span class="suffix">%</span></div>
+          <div class="hint">2ª mano ≈ ITP 6-10% (según CCAA). Obra nueva: IVA 10% viv., 21% local.</div>
+        </div>
+        <div class="row">
+          <label for="ajd">AJD</label>
+          <div class="ctl"><input id="ajd" type="text" inputmode="decimal" placeholder="0" value="0"><span class="suffix">%</span></div>
+          <div class="hint">Si aplica (escrituras/hipoteca): 0,5–1,5% aprox.</div>
+        </div>
+        <div class="row">
+          <label for="compfijos">Notaría/Registro/Gestoría</label>
+          <div class="ctl"><span class="suffix">€</span><input id="compfijos" type="text" inputmode="decimal" placeholder="1.500" value="1500"></div>
+          <div class="hint">Gastos fijos de la compra</div>
+        </div>
+        <div class="row">
+          <label for="compotros">Otros costes de compra</label>
+          <div class="ctl"><span class="suffix">€</span><input id="compotros" type="text" inputmode="decimal" placeholder="0" value="0"></div>
+          <div class="hint">Tasación, licencias previas, etc.</div>
+        </div>
+
+        <!-- REFORMA -->
+        <div class="row">
+          <label for="reforma">Reforma base (sin IVA)</label>
+          <div class="ctl"><span class="suffix">€</span><input id="reforma" type="text" inputmode="decimal" placeholder="40.000" value="40000"></div>
+          <div class="hint">Presupuesto neto sin impuestos</div>
+        </div>
+        <div class="row">
+          <label for="ivaref">IVA reforma</label>
+          <div class="ctl"><input id="ivaref" type="text" inputmode="decimal" placeholder="21" value="21"><span class="suffix">%</span></div>
+          <div class="hint">General 21%. Puede ser 10% según condiciones.</div>
+        </div>
+
+        <!-- EMPRESA/FINANCIACIÓN/VENTA -->
+        <div class="row">
+          <label for="cemp">Costes de empresa imputados</label>
+          <div class="ctl"><span class="suffix">€</span><input id="cemp" type="text" inputmode="decimal" placeholder="6.000" value="6000"></div>
+          <div class="hint">Overheads, comerciales, seguros, etc.</div>
+        </div>
+        <div class="row">
+          <label for="fin">Costes de financiación</label>
+          <div class="ctl"><span class="suffix">€</span><input id="fin" type="text" inputmode="decimal" placeholder="3.000" value="3000"></div>
+          <div class="hint">Intereses, comisiones, estudio, etc.</div>
+        </div>
+        <div class="row">
+          <label for="ventafijos">Costes de venta fijos</label>
+          <div class="ctl"><span class="suffix">€</span><input id="ventafijos" type="text" inputmode="decimal" placeholder="1.200" value="1200"></div>
+          <div class="hint">Certificados, reportaje, home staging…</div>
+        </div>
+        <div class="row">
+          <label for="k">Comisión sobre PV</label>
+          <div class="ctl"><input id="k" type="text" inputmode="decimal" placeholder="3" value="3"><span class="suffix">%</span></div>
+          <div class="hint">Agencia/Comercialización</div>
+        </div>
+
+        <!-- FISCALIDAD / OBJETIVO -->
+        <div class="row">
+          <label for="tax">Impuesto sobre beneficios</label>
+          <div class="ctl"><input id="tax" type="text" inputmode="decimal" placeholder="25" value="25"><span class="suffix">%</span></div>
+          <div class="hint">IS o IRPF efectivo</div>
+        </div>
+        <div class="row">
+          <label for="roi">ROI objetivo</label>
+          <div class="ctl"><input id="roi" type="text" inputmode="decimal" placeholder="25" value="25"><span class="suffix">%</span></div>
+          <div class="hint">% sobre la inversión (I)</div>
+        </div>
+
+        <!-- PREFERENCIA DE PV RECOMENDADO -->
+        <div class="row" style="border-bottom:none">
+          <label>PV recomendado según…</label>
+          <div class="seg" role="tablist" aria-label="Base del PV recomendado">
+            <button type="button" class="active" data-basis="net">ROI NETO (después de impuestos)</button>
+            <button type="button" data-basis="pre">ROI PRE-impuestos</button>
+            <button type="button" data-basis="max">El mayor de ambos</button>
+          </div>
+          <div class="hint">Elige la regla para definir tu precio recomendado</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="reset">Restablecer</button>
+          <button class="btn" id="share">Compartir escenario</button>
+        </div>
+        <div class="footer">⚠️ Resultado orientativo. Verifica normativa fiscal/autonómica aplicable.</div>
+      </section>
+
+      <section class="card results">
+        <h2 class="section-title">Resultados</h2>
+
+        <div class="kpis">
+          <div class="kpi">
+            <h3>Inversión total (I)</h3>
+            <div class="v" id="I">—</div>
+          </div>
+          <div class="kpi">
+            <h3>PV objetivo (ROI pre-impuestos)</h3>
+            <div class="v" id="PVpre">—</div>
+          </div>
+          <div class="kpi">
+            <h3>PV objetivo (ROI neto)</h3>
+            <div class="v" id="PVpost">—</div>
+          </div>
+          <div class="kpi good">
+            <h3>Precio de venta RECOMENDADO</h3>
+            <div class="v" id="PVrec">—</div>
+          </div>
+        </div>
+
+        <table aria-label="Detalle de beneficios y márgenes">
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th>Con PV-pre</th>
+              <th>Con PV-neto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Beneficio pre-impuestos (€)</td>
+              <td id="Bpre_pre">—</td>
+              <td id="Bpre_post">—</td>
+            </tr>
+            <tr>
+              <td>Beneficio NETO (€)</td>
+              <td id="Bnet_pre">—</td>
+              <td id="Bnet_post">—</td>
+            </tr>
+            <tr>
+              <td>ROI pre / ROI neto</td>
+              <td id="ROI_pre_pre">—</td>
+              <td id="ROI_net_post">—</td>
+            </tr>
+            <tr>
+              <td>Margen pre sobre PV</td>
+              <td id="M_pre_pre">—</td>
+              <td id="M_pre_post">—</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="actions">
+          <button class="btn primary" id="copyPV">Copiar PV recomendado</button>
+          <button class="btn" id="redondear">Redondear PV a cientos</button>
+        </div>
+        <div class="muted" id="explain">Introduce/ajusta los datos para ver el detalle.</div>
+      </section>
+    </div>
+  </div>
+
+<script type="module" src="index.tsx"></script>
+</body>
+</html>
